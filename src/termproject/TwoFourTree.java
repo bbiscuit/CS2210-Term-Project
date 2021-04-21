@@ -74,6 +74,28 @@ public class TwoFourTree
         return null;
     }
 
+    /**
+     * Fixes the node to retain the 2-4 tree property.
+     *
+     * @param node the node to fix.
+     */
+    private void fixNode(TFNode node) {
+        // If the size of the node is at the limit (4)...
+
+            // Get the parent of the passed node.
+
+            // If the parent is null...
+
+                // Create a new parent node.
+
+            // Send the second-to-last (the third) item to the parent.
+
+            // Split the node into two children; the first makes up the first two items, the second is the last
+            // item (after the one we moved up).
+
+            // Link the children to the parent.
+    }
+
     public static void main(String[] args) {
         Comparator myComp = new IntegerComparator();
         TwoFourTree myTree = new TwoFourTree(myComp);
