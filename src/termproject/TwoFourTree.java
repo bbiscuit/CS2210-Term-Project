@@ -63,6 +63,17 @@ public class TwoFourTree
         return null;
     }
 
+    /**
+     * Returns the key which is "first greater than or equal to" in the provided node.
+     *
+     * @param key the key to test for.
+     * @param node the node to check.
+     * @return the node which is "first greater than or equal to."
+     */
+    private Object findFirstGreaterThanOrEqualTo(Object key, TFNode node) {
+        return null;
+    }
+
     public static void main(String[] args) {
         Comparator myComp = new IntegerComparator();
         TwoFourTree myTree = new TwoFourTree(myComp);
