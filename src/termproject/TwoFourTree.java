@@ -78,22 +78,57 @@ public class TwoFourTree
      * Fixes the node to retain the 2-4 tree property.
      *
      * @param node the node to fix.
+     * @param childIndex the child the node is of its parent. This value is ignored if the node is parentless.
      */
-    private void fixNode(TFNode node) {
+    private void fixNode(TFNode node, int childIndex) {
         // If the size of the node is at the limit (4)...
+
+        if (node != null && node.getNumItems() == 4) {
 
             // Get the parent of the passed node.
 
+            TFNode parent = node.getParent();
+
             // If the parent is null...
+
+            if (parent == null) {
 
                 // Create a new parent node.
 
+                parent = new TFNode();
+                node.setParent(parent);
+                childIndex = 0;
+            }
+
             // Send the second-to-last (the third) item to the parent.
+
+            final int MOVE_UP_INDEX = 2;
+            Item moveUp = node.deleteItem(MOVE_UP_INDEX);
+            parent.insertItem(childIndex, moveUp);
 
             // Split the node into two children; the first makes up the first two items, the second is the last
             // item (after the one we moved up).
 
-            // Link the children to the parent.
+            final int SPLIT_INDEX = 3;
+            TFNode splitNode = new TFNode();
+            splitNode.addItem(0, node.deleteItem(SPLIT_INDEX));
+            splitNode.setParent(parent);
+
+            // Assign the children of the node to the children of the two new nodes.
+
+            splitNode.setChild(0, node.getChild(3));
+            node.setChild(3, null);
+            splitNode.setChild(1, node.getChild(4));
+            node.setChild(4, null);
+
+            // Shift the children to make room for the new node in the parent.
+
+            // (If something is broken, it's probably this)
+            for (int i = 4; i >= childIndex + 1; i--) {
+                parent.setChild(i, parent.getChild(i - 1));
+            }
+            parent.setChild(childIndex + 1, splitNode);
+        }
     }
 
     public static void main(String[] args) {
