@@ -35,6 +35,9 @@ public class TwoFourTree
         return (size == 0);
     }
 
+
+
+
     /**
      * Searches dictionary to determine if key is present
      * @param key to be searched for
@@ -70,8 +73,18 @@ public class TwoFourTree
      * @param node the node to check.
      * @return the node which is "first greater than or equal to."
      */
-    private Object findFirstGreaterThanOrEqualTo(Object key, TFNode node) {
-        return null;
+    private Object findFirstGreaterThanOrEqualTo(TFNode node, Object key) {
+        int i = 0;
+        // Search through all the items in the node
+        for (i = 0; i < node.getNumItems(); i++) {
+            Object tempKey = node.getItem(i).key();
+            // if we find something that is greater than the given key
+            // we get its index if not we return the greatest index
+            if (treeComp.isGreaterThanOrEqualTo(tempKey, key)) {
+                return i;
+            }
+        }
+        return i;
     }
 
     public static void main(String[] args) {
