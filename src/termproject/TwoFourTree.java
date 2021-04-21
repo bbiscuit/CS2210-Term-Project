@@ -55,15 +55,39 @@ public class TwoFourTree
      * @param element to be inserted
      */
     public void insertElement(Object key, Object element) {
+        final int MAX_ITEMS = 3;
         Item tempItem = new Item(key, element);
-        if (root() == null) {
-            root().insertItem(0, tempItem);
+        if (treeRoot == null) {
+            treeRoot = new TFNode();
+            treeRoot.insertItem(0, tempItem);
+            size++;
         }
-        if (root().getNumItems() == 0) {
-            root().insertItem(0, tempItem);
+        else {
+            if (treeRoot.getNumItems() < MAX_ITEMS) {
+                treeRoot.insertItem(size, tempItem);
+                size++;
+            }
+            else {
+                int index = findFirstGreaterThanOrEqualTo(key, treeRoot);
+                TFNode child = treeRoot.getChild(index);
+                if (child == null) {
+                    child = new TFNode();
+                    child.insertItem(0, tempItem);
+                    size++;
+                }
+                else {
+                    if (child.getNumItems() < MAX_ITEMS) {
+                        child.insertItem(child.getNumItems(), tempItem);
+                        size++;
+                    }
+                    else {
+                        child.insertItem(MAX_ITEMS, tempItem);
+                        size++;
+                        fixNode(child, MAX_ITEMS);
+                    }
+                }
+            }
         }
-        int index = findFirstGreaterThanOrEqualTo(key, root());
-
 
 
 
