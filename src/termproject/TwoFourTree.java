@@ -37,27 +37,45 @@ public class TwoFourTree
 
     /**
      * Searches dictionary to determine if key is present
+     *
      * @param key to be searched for
      * @return object corresponding to key; null if not found
      */
     public Object findElement(Object key) {
+
+
+
         return null;
     }
 
     /**
      * Inserts provided element into the Dictionary
-     * @param key of object to be inserted
+     *Flint, Michigan
+     * @param key     of object to be inserted
      * @param element to be inserted
      */
     public void insertElement(Object key, Object element) {
+        Item tempItem = new Item(key, element);
+        if (root() == null) {
+            root().insertItem(0, tempItem);
+        }
+        if (root().getNumItems() == 0) {
+            root().insertItem(0, tempItem);
+        }
+        int index = findFirstGreaterThanOrEqualTo(key, root());
+
+
+
+
     }
 
     /**
      * Searches dictionary to determine if key is present, then
      * removes and returns corresponding object
+     *
      * @param key of data to be removed
      * @return object corresponding to key
-     * @exception ElementNotFoundException if the key is not in dictionary
+     * @throws ElementNotFoundException if the key is not in dictionary
      */
     public Object removeElement(Object key) throws ElementNotFoundException {
         return null;
@@ -66,21 +84,21 @@ public class TwoFourTree
     /**
      * Returns the key which is "first greater than or equal to" in the provided node.
      *
-     * @param key the key to test for.
+     * @param key  the key to test for.
      * @param node the node to check.
      * @return the node which is "first greater than or equal to."
      */
-    private Object findFirstGreaterThanOrEqualTo(Object key, TFNode node) {
-        return null;
+    private int findFirstGreaterThanOrEqualTo(Object key, TFNode node) {
+        return -1;
     }
 
     /**
      * Fixes the node to retain the 2-4 tree property.
      *
-     * @param node the node to fix.
+     * @param node       the node to fix.
      * @param childIndex the child the node is of its parent. This value is ignored if the node is parentless.
      */
-    private void fixNode(TFNode node, int childIndex) {
+    private static void fixNode(TFNode node, int childIndex) {
         // If the size of the node is at the limit (4)...
 
         if (node != null && node.getNumItems() == 4) {
@@ -109,7 +127,7 @@ public class TwoFourTree
             // Split the node into two children; the first makes up the first two items, the second is the last
             // item (after the one we moved up).
 
-            final int SPLIT_INDEX = 3;
+            final int SPLIT_INDEX = 2;
             TFNode splitNode = new TFNode();
             splitNode.addItem(0, node.deleteItem(SPLIT_INDEX));
             splitNode.setParent(parent);
@@ -130,7 +148,20 @@ public class TwoFourTree
             parent.setChild(childIndex + 1, splitNode);
         }
     }
+    public static void main(String[] args) {
+        TFNode temp = new TFNode();
+        temp.addItem(0, new Item(1, 12));
+        temp.addItem(1, new Item(2, 12));
+        temp.addItem(2, new Item(3, 12));
+        temp.addItem(3, new Item(4, 12));
 
+        fixNode(temp, 0);
+
+    }
+
+
+}
+    /*
     public static void main(String[] args) {
         Comparator myComp = new IntegerComparator();
         TwoFourTree myTree = new TwoFourTree(myComp);
@@ -302,3 +333,4 @@ public class TwoFourTree
 
     }
 }
+*/
