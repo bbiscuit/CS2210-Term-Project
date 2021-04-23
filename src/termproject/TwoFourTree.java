@@ -141,7 +141,22 @@ public class TwoFourTree
                 node.setParent(parent);
                 childIndex = 0;
             }
+            // Create new new node
+            final int MOVE_UP_INDEX = 2;
+            final int SPLIT_INDEX = 3;
+            TFNode splitNode = new TFNode();
 
+            // Remove the split number first (Because it is the last in
+            // the array) then remove the item that needs to be moved up
+            splitNode.addItem(0, node.deleteItem(SPLIT_INDEX));
+            Item moveUp = node.deleteItem(MOVE_UP_INDEX);
+
+            // Fix up the parents
+            parent.insertItem(childIndex, moveUp);
+            splitNode.setParent(parent);
+
+            /*
+            *** OLD CODE
             // Send the second-to-last (the third) item to the parent.
 
             final int MOVE_UP_INDEX = 2;
@@ -151,10 +166,14 @@ public class TwoFourTree
             // Split the node into two children; the first makes up the first two items, the second is the last
             // item (after the one we moved up).
 
-            final int SPLIT_INDEX = 2;
+            final int SPLIT_INDEX = 3;
             TFNode splitNode = new TFNode();
             splitNode.addItem(0, node.deleteItem(SPLIT_INDEX));
             splitNode.setParent(parent);
+
+
+
+             */
 
             // Assign the children of the node to the children of the two new nodes.
 
@@ -169,6 +188,8 @@ public class TwoFourTree
             for (int i = 4; i >= childIndex + 1; i--) {
                 parent.setChild(i, parent.getChild(i - 1));
             }
+            // Recent addition which may be broken
+            parent.setChild(0, node);
             parent.setChild(childIndex + 1, splitNode);
         }
     }
