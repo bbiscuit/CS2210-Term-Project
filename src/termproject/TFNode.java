@@ -133,4 +133,16 @@ public class TFNode {
             throw new TFNodeException();
         nodeChildren[index] = child;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < numItems - 1; i++) {
+            sb.append(getItem(i));
+            sb.append(", ");
+        }
+        sb.append(getItem(numItems - 1));
+
+        return sb.toString();
+    }
 }

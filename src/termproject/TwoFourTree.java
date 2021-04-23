@@ -40,6 +40,7 @@ public class TwoFourTree
 
     /**
      * Searches dictionary to determine if key is present
+     *
      * @param key to be searched for
      * @return object corresponding to key; null if not found
      */
@@ -72,18 +73,89 @@ public class TwoFourTree
 
     /**
      * Inserts provided element into the Dictionary
-     * @param key of object to be inserted
+     *
+     * @param key     of object to be inserted
      * @param element to be inserted
      */
     public void insertElement(Object key, Object element) {
+        // # Declare a new element to insert into the tree
+        final int MAX_ITEMS = treeRoot.getMaxItems();
+        Item tempItem = new Item(key, element);
+
+        // # Edge case: root is null
+
+        if (treeRoot == null) {
+
+            // # Make a new node at the root.
+
+            treeRoot = new TFNode();
+            treeRoot.insertItem(0, tempItem);
+            size++;
+
+            return;
+        }
+
+        // # If the root is not at capacity, insert.
+
+        TFNode insertLocation = treeRoot;
+        int index = findFirstGreaterThanOrEqualTo(key, insertLocation);
+
+        while (insertLocation.getNumItems() > MAX_ITEMS) {
+            // # Find the index of the child to insert at
+            TFNode temp = insertLocation.getChild(index);
+
+            // # If the child is null, then we
+            if (temp == null) {
+                break;
+            }
+
+            insertLocation = temp;
+            index = findFirstGreaterThanOrEqualTo(key, insertLocation);
+        }
+
+        insertLocation.insertItem(index, tempItem);
+        // fixNode(insertLocation, whatChildIsThis(insertLocation));
+    }
+
+
+    /**
+     * Determines what child of its parent the provided node is.
+     *
+     * @param node the node to check.
+     * @return the child index of the passed node; -1 if the node is parent-less or if the provided node is not hooked
+     * up to its child correctly.
+     * @throws NullPointerException if the provided node is null
+     */
+    private int whatChildIsThis(TFNode node) {
+        // # Loop through the parent's children.
+
+        if (node == null) {
+            throw new NullPointerException("null argument");
+        }
+
+        TFNode parent = node.getParent();
+
+        if (parent != null) {
+            for (int i = 0; i <= parent.getMaxItems() + 1; i++) {
+
+                // # If the reference of the passed node is the same as the child, then return the index.
+
+                if (node == parent.getChild(i)) {
+                    return i;
+                }
+            }
+        }
+
+        return -1;
     }
 
     /**
      * Searches dictionary to determine if key is present, then
      * removes and returns corresponding object
+     *
      * @param key of data to be removed
      * @return object corresponding to key
-     * @exception ElementNotFoundException if the key is not in dictionary
+     * @throws ElementNotFoundException if the key is not in dictionary
      */
     public Object removeElement(Object key) throws ElementNotFoundException {
         return null;
@@ -92,10 +164,11 @@ public class TwoFourTree
     /**
      * Returns the key which is "first greater than or equal to" in the provided node.
      *
-     * @param key the key to test for.
+     * @param key  the key to test for.
      * @param node the node to check.
      * @return the node which is "first greater than or equal to."
      */
+
     private int findFirstGreaterThanOrEqualTo(TFNode node, Object key) {
         int i = 0;
         // Search through all the items in the node
@@ -110,6 +183,113 @@ public class TwoFourTree
         return i;
     }
 
+    /**
+     * Fixes the node to retain the 2-4 tree property.
+     *
+     * @param node       the node to fix.
+     * @param childIndex the child the node is of its parent. This value is ignored if the node is parentless.
+     */
+    private static void fixNode(TFNode node, int childIndex) {
+        // If the size of the node is at the limit (4)...
+
+        if (node != null && node.getNumItems() == 4) {
+
+            // Get the parent of the passed node.
+
+            TFNode parent = node.getParent();
+
+            // If the parent is null...
+
+            if (parent == null) {
+
+                // Create a new parent node.
+
+                parent = new TFNode();
+                node.setParent(parent);
+                childIndex = 0;
+            }
+            // Create new new node
+            final int MOVE_UP_INDEX = 2;
+            final int SPLIT_INDEX = 3;
+            TFNode splitNode = new TFNode();
+
+            // Remove the split number first (Because it is the last in
+            // the array) then remove the item that needs to be moved up
+            splitNode.addItem(0, node.deleteItem(SPLIT_INDEX));
+            Item moveUp = node.deleteItem(MOVE_UP_INDEX);
+
+            // Fix up the parents
+            parent.insertItem(childIndex, moveUp);
+            splitNode.setParent(parent);
+
+            /*
+            *** OLD CODE
+            // Send the second-to-last (the third) item to the parent.
+
+            final int MOVE_UP_INDEX = 2;
+            Item moveUp = node.deleteItem(MOVE_UP_INDEX);
+            parent.insertItem(childIndex, moveUp);
+
+            // Split the node into two children; the first makes up the first two items, the second is the last
+            // item (after the one we moved up).
+
+            final int SPLIT_INDEX = 3;
+            TFNode splitNode = new TFNode();
+            splitNode.addItem(0, node.deleteItem(SPLIT_INDEX));
+            splitNode.setParent(parent);
+
+
+
+             */
+
+            // Assign the children of the node to the children of the two new nodes.
+
+            splitNode.setChild(0, node.getChild(3));
+            node.setChild(3, null);
+            splitNode.setChild(1, node.getChild(4));
+            node.setChild(4, null);
+
+            // Shift the children to make room for the new node in the parent.
+
+            // (If something is broken, it's probably this)
+            for (int i = 4; i >= childIndex + 1; i--) {
+                parent.setChild(i, parent.getChild(i - 1));
+            }
+            // Recent addition which may be broken
+            parent.setChild(childIndex, node);
+            parent.setChild(childIndex + 1, splitNode);
+        }
+    }
+    public static void main(String[] args) {
+        // # Declare a parent and fill it
+
+        TFNode parent = new TFNode();
+        for (int i = 1; i < 4; i++) {
+            parent.addItem(i - 1, new Item(i * 10, i * 10));
+        }
+
+        TFNode firstChild = new TFNode();
+        for (int i = 0; i < 4; i++) {
+            firstChild.addItem(i, new Item(i, i));
+        }
+
+        firstChild.setParent(parent);
+        parent.setChild(0, firstChild);
+
+        fixNode(firstChild, 0);
+        fixNode(parent, -1);
+
+        TFNode grandparent = parent.getParent();
+
+        System.out.println("grandparent: " + grandparent);
+        System.out.println("child 1:" + grandparent.getChild(0));
+        System.out.println("child 2: " + grandparent.getChild(1));
+        System.out.println("grandchild 1: " + grandparent.getChild(0).getChild(0));
+        System.out.println("grandchild 2: " + grandparent.getChild(0).getChild(1));
+    }
+
+
+    /*
     public static void main(String[] args) {
         Comparator myComp = new IntegerComparator();
         TwoFourTree myTree = new TwoFourTree(myComp);
@@ -193,6 +373,7 @@ public class TwoFourTree
         }
         System.out.println("done");
     }
+*/
 
     public void printAllElements() {
         int indent = 0;
