@@ -35,6 +35,9 @@ public class TwoFourTree
         return (size == 0);
     }
 
+
+
+
     /**
      * Searches dictionary to determine if key is present
      *
@@ -42,8 +45,28 @@ public class TwoFourTree
      * @return object corresponding to key; null if not found
      */
     public Object findElement(Object key) {
+        // # Get the starting node as the root of the tree.
 
+        TFNode node = root();
 
+        // # While the node is not null...
+
+        while (node != null) {
+
+            // # Find the first key in the node which is greater than or equal to the argument.
+
+            int fge = findFirstGreaterThanOrEqualTo(node, key);
+
+            // # If the found key is the parameter, return.
+
+            if (node.getItem(fge).key() == key) {
+                return node.getItem(fge).element();
+            }
+
+            // # Otherwise, repeat with the child at the index of the found key.
+
+            node = node.getChild(fge);
+        }
 
         return null;
     }
@@ -126,10 +149,6 @@ public class TwoFourTree
         return -1;
     }
 
-    private void insertInto(TFNode node, Item item) {
-
-    }
-
     /**
      * Searches dictionary to determine if key is present, then
      * removes and returns corresponding object
@@ -149,8 +168,19 @@ public class TwoFourTree
      * @param node the node to check.
      * @return the node which is "first greater than or equal to."
      */
-    private int findFirstGreaterThanOrEqualTo(Object key, TFNode node) {
-        return -1;
+
+    private int findFirstGreaterThanOrEqualTo(TFNode node, Object key) {
+        int i = 0;
+        // Search through all the items in the node
+        for (i = 0; i < node.getNumItems(); i++) {
+            Object tempKey = node.getItem(i).key();
+            // if we find something that is greater than the given key
+            // we get its index if not we return the greatest index
+            if (treeComp.isGreaterThanOrEqualTo(tempKey, key)) {
+                return i;
+            }
+        }
+        return i;
     }
 
     /**
@@ -226,19 +256,36 @@ public class TwoFourTree
                 parent.setChild(i, parent.getChild(i - 1));
             }
             // Recent addition which may be broken
-            parent.setChild(0, node);
+            parent.setChild(childIndex, node);
             parent.setChild(childIndex + 1, splitNode);
         }
     }
     public static void main(String[] args) {
-        TFNode temp = new TFNode();
-        temp.addItem(0, new Item(1, 12));
-        temp.addItem(1, new Item(2, 12));
-        temp.addItem(2, new Item(3, 12));
-        temp.addItem(3, new Item(4, 12));
+        // # Declare a parent and fill it
 
-        fixNode(temp, 0);
+        TFNode parent = new TFNode();
+        for (int i = 1; i < 4; i++) {
+            parent.addItem(i - 1, new Item(i * 10, i * 10));
+        }
 
+        TFNode firstChild = new TFNode();
+        for (int i = 0; i < 4; i++) {
+            firstChild.addItem(i, new Item(i, i));
+        }
+
+        firstChild.setParent(parent);
+        parent.setChild(0, firstChild);
+
+        fixNode(firstChild, 0);
+        fixNode(parent, -1);
+
+        TFNode grandparent = parent.getParent();
+
+        System.out.println("grandparent: " + grandparent);
+        System.out.println("child 1:" + grandparent.getChild(0));
+        System.out.println("child 2: " + grandparent.getChild(1));
+        System.out.println("grandchild 1: " + grandparent.getChild(0).getChild(0));
+        System.out.println("grandchild 2: " + grandparent.getChild(0).getChild(1));
     }
 
 
@@ -327,6 +374,7 @@ public class TwoFourTree
         System.out.println("done");
     }
 */
+
     public void printAllElements() {
         int indent = 0;
         if (root() == null) {
