@@ -95,7 +95,36 @@ public class TwoFourTree
     }
 
 
+    /**
+     * Determines what child of its parent the provided node is.
+     *
+     * @param node the node to check.
+     * @return the child index of the passed node; -1 if the node is parent-less or if the provided node is not hooked
+     * up to its child correctly.
+     * @throws NullPointerException if the provided node is null
+     */
+    private int whatChildIsThis(TFNode node) {
+        // # Loop through the parent's children.
 
+        if (node == null) {
+            throw new NullPointerException("null argument");
+        }
+
+        TFNode parent = node.getParent();
+
+        if (parent != null) {
+            for (int i = 0; i <= parent.getMaxItems() + 1; i++) {
+
+                // # If the reference of the passed node is the same as the child, then return the index.
+
+                if (node == parent.getChild(i)) {
+                    return i;
+                }
+            }
+        }
+
+        return -1;
+    }
 
     private void insertInto(TFNode node, Item item) {
 
