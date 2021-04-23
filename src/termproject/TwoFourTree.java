@@ -53,46 +53,83 @@ public class TwoFourTree
 
     /**
      * Inserts provided element into the Dictionary
-     *Flint, Michigan
+     *
      * @param key     of object to be inserted
      * @param element to be inserted
      */
     public void insertElement(Object key, Object element) {
-        final int MAX_ITEMS = 3;
+        // # Declare a new element to insert into the tree
+        final int MAX_ITEMS = treeRoot.getMaxItems();
         Item tempItem = new Item(key, element);
+
+        // # Edge case: root is null
+
         if (treeRoot == null) {
+
+            // # Make a new node at the root.
+
             treeRoot = new TFNode();
             treeRoot.insertItem(0, tempItem);
             size++;
+
+            return;
         }
-        else {
-            if (treeRoot.getNumItems() < MAX_ITEMS) {
-                treeRoot.insertItem(size, tempItem);
-                size++;
+
+        // # If the root is not at capacity, insert.
+
+        TFNode insertLocation = treeRoot;
+        int index = findFirstGreaterThanOrEqualTo(key, insertLocation);
+
+        while (insertLocation.getNumItems() > MAX_ITEMS) {
+            // # Find the index of the child to insert at
+            TFNode temp = insertLocation.getChild(index);
+
+            // # If the child is null, then we
+            if (temp == null) {
+                break;
             }
-            else {
-                int index = findFirstGreaterThanOrEqualTo(key, treeRoot);
-                TFNode child = treeRoot.getChild(index);
-                if (child == null) {
-                    child = new TFNode();
-                    child.insertItem(0, tempItem);
-                    size++;
-                }
-                else {
-                    if (child.getNumItems() < MAX_ITEMS) {
-                        child.insertItem(child.getNumItems(), tempItem);
-                        size++;
-                    }
-                    else {
-                        child.insertItem(MAX_ITEMS, tempItem);
-                        size++;
-                        fixNode(child, MAX_ITEMS);
-                    }
+
+            insertLocation = temp;
+            index = findFirstGreaterThanOrEqualTo(key, insertLocation);
+        }
+
+        insertLocation.insertItem(index, tempItem);
+        // fixNode(insertLocation, whatChildIsThis(insertLocation));
+    }
+
+
+    /**
+     * Determines what child of its parent the provided node is.
+     *
+     * @param node the node to check.
+     * @return the child index of the passed node; -1 if the node is parent-less or if the provided node is not hooked
+     * up to its child correctly.
+     * @throws NullPointerException if the provided node is null
+     */
+    private int whatChildIsThis(TFNode node) {
+        // # Loop through the parent's children.
+
+        if (node == null) {
+            throw new NullPointerException("null argument");
+        }
+
+        TFNode parent = node.getParent();
+
+        if (parent != null) {
+            for (int i = 0; i <= parent.getMaxItems() + 1; i++) {
+
+                // # If the reference of the passed node is the same as the child, then return the index.
+
+                if (node == parent.getChild(i)) {
+                    return i;
                 }
             }
         }
 
+        return -1;
+    }
 
+    private void insertInto(TFNode node, Item item) {
 
     }
 
@@ -233,7 +270,6 @@ public class TwoFourTree
         System.out.println("grandchild 1: " + grandparent.getChild(0).getChild(0));
         System.out.println("grandchild 2: " + grandparent.getChild(0).getChild(1));
     }
-
 
 
     /*
