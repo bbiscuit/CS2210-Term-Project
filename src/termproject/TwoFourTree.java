@@ -129,10 +129,6 @@ public class TwoFourTree
         return -1;
     }
 
-    private void insertInto(TFNode node, Item item) {
-
-    }
-
     /**
      * Searches dictionary to determine if key is present, then
      * removes and returns corresponding object
