@@ -114,6 +114,7 @@ public class TwoFourTree
             index = findFirstGreaterThanOrEqualTo(insertLocation, key);
         }
 
+        // NOT WORKING
         insertLocation.insertItem(index, tempItem);
         fixNode(insertLocation, whatChildIsThis(insertLocation));
     }
