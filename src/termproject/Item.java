@@ -35,4 +35,16 @@ public class Item {
     public void setElement (Object element) {
         itemElement = element;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append('[');
+        sb.append(key() != null ? key().toString() : "null");
+        sb.append(", ");
+        sb.append(element() != null ? element().toString() : "null");
+        sb.append(']');
+
+        return sb.toString();
+    }
 }

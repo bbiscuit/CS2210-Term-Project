@@ -202,19 +202,36 @@ public class TwoFourTree
                 parent.setChild(i, parent.getChild(i - 1));
             }
             // Recent addition which may be broken
-            parent.setChild(0, node);
+            parent.setChild(childIndex, node);
             parent.setChild(childIndex + 1, splitNode);
         }
     }
     public static void main(String[] args) {
-        TFNode temp = new TFNode();
-        temp.addItem(0, new Item(1, 12));
-        temp.addItem(1, new Item(2, 12));
-        temp.addItem(2, new Item(3, 12));
-        temp.addItem(3, new Item(4, 12));
+        // # Declare a parent and fill it
 
-        fixNode(temp, 0);
+        TFNode parent = new TFNode();
+        for (int i = 1; i < 4; i++) {
+            parent.addItem(i - 1, new Item(i * 10, i * 10));
+        }
 
+        TFNode firstChild = new TFNode();
+        for (int i = 0; i < 4; i++) {
+            firstChild.addItem(i, new Item(i, i));
+        }
+
+        firstChild.setParent(parent);
+        parent.setChild(0, firstChild);
+
+        fixNode(firstChild, 0);
+        fixNode(parent, -1);
+
+        TFNode grandparent = parent.getParent();
+
+        System.out.println("grandparent: " + grandparent);
+        System.out.println("child 1:" + grandparent.getChild(0));
+        System.out.println("child 2: " + grandparent.getChild(1));
+        System.out.println("grandchild 1: " + grandparent.getChild(0).getChild(0));
+        System.out.println("grandchild 2: " + grandparent.getChild(0).getChild(1));
     }
 
 
