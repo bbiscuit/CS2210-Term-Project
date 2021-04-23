@@ -50,46 +50,54 @@ public class TwoFourTree
 
     /**
      * Inserts provided element into the Dictionary
-     *Flint, Michigan
+     *
      * @param key     of object to be inserted
      * @param element to be inserted
      */
     public void insertElement(Object key, Object element) {
-        final int MAX_ITEMS = 3;
+        // # Declare a new element to insert into the tree
+        final int MAX_ITEMS = treeRoot.getMaxItems();
         Item tempItem = new Item(key, element);
+
+        // # Edge case: root is null
+
         if (treeRoot == null) {
+
+            // # Make a new node at the root.
+
             treeRoot = new TFNode();
             treeRoot.insertItem(0, tempItem);
             size++;
-        }
-        else {
-            if (treeRoot.getNumItems() < MAX_ITEMS) {
-                treeRoot.insertItem(size, tempItem);
-                size++;
-            }
-            else {
-                int index = findFirstGreaterThanOrEqualTo(key, treeRoot);
-                TFNode child = treeRoot.getChild(index);
-                if (child == null) {
-                    child = new TFNode();
-                    child.insertItem(0, tempItem);
-                    size++;
-                }
-                else {
-                    if (child.getNumItems() < MAX_ITEMS) {
-                        child.insertItem(child.getNumItems(), tempItem);
-                        size++;
-                    }
-                    else {
-                        child.insertItem(MAX_ITEMS, tempItem);
-                        size++;
-                        fixNode(child, MAX_ITEMS);
-                    }
-                }
-            }
+
+            return;
         }
 
+        // # If the root is not at capacity, insert.
 
+        TFNode insertLocation = treeRoot;
+        int index = findFirstGreaterThanOrEqualTo(key, insertLocation);
+
+        while (insertLocation.getNumItems() > MAX_ITEMS) {
+            // # Find the index of the child to insert at
+            TFNode temp = insertLocation.getChild(index);
+
+            // # If the child is null, then we
+            if (temp == null) {
+                break;
+            }
+
+            insertLocation = temp;
+            index = findFirstGreaterThanOrEqualTo(key, insertLocation);
+        }
+
+        insertLocation.insertItem(index, tempItem);
+        // fixNode(insertLocation, whatChildIsThis(insertLocation));
+    }
+
+
+
+
+    private void insertInto(TFNode node, Item item) {
 
     }
 
