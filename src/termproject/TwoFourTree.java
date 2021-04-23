@@ -45,8 +45,28 @@ public class TwoFourTree
      * @return object corresponding to key; null if not found
      */
     public Object findElement(Object key) {
+        // # Get the starting node as the root of the tree.
 
+        TFNode node = root();
 
+        // # While the node is not null...
+
+        while (node != null) {
+
+            // # Find the first key in the node which is greater than or equal to the argument.
+
+            int fge = findFirstGreaterThanOrEqualTo(node, key);
+
+            // # If the found key is the parameter, return.
+
+            if (node.getItem(fge).key() == key) {
+                return node.getItem(fge).element();
+            }
+
+            // # Otherwise, repeat with the child at the index of the found key.
+
+            node = node.getChild(fge);
+        }
 
         return null;
     }
@@ -148,7 +168,8 @@ public class TwoFourTree
      * @param node the node to check.
      * @return the node which is "first greater than or equal to."
      */
-    private int findFirstGreaterThanOrEqualTo(Object key, TFNode node) {
+
+    private int findFirstGreaterThanOrEqualTo(TFNode node, Object key) {
         int i = 0;
         // Search through all the items in the node
         for (i = 0; i < node.getNumItems(); i++) {
