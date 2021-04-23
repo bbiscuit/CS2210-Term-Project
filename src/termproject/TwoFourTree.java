@@ -115,7 +115,7 @@ public class TwoFourTree
      * @param node the node to check.
      * @return the node which is "first greater than or equal to."
      */
-    private int findFirstGreaterThanOrEqualTo(TFNode node, Object key) {
+    private int findFirstGreaterThanOrEqualTo(Object key, TFNode node) {
         int i = 0;
         // Search through all the items in the node
         for (i = 0; i < node.getNumItems(); i++) {
