@@ -98,7 +98,7 @@ public class TwoFourTree
         // # If the root is not at capacity, insert.
 
         TFNode insertLocation = treeRoot;
-        int index = findFirstGreaterThanOrEqualTo(key, insertLocation);
+        int index = findFirstGreaterThanOrEqualTo(insertLocation, key);
 
         while (insertLocation.getNumItems() > MAX_ITEMS) {
             // # Find the index of the child to insert at
@@ -110,11 +110,11 @@ public class TwoFourTree
             }
 
             insertLocation = temp;
-            index = findFirstGreaterThanOrEqualTo(key, insertLocation);
+            index = findFirstGreaterThanOrEqualTo(insertLocation, key);
         }
 
         insertLocation.insertItem(index, tempItem);
-        // fixNode(insertLocation, whatChildIsThis(insertLocation));
+        fixNode(insertLocation, whatChildIsThis(insertLocation));
     }
 
 
