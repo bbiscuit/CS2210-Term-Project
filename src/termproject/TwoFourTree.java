@@ -205,7 +205,6 @@ public class TwoFourTree
     }
 
 
-}
     /*
     public static void main(String[] args) {
         Comparator myComp = new IntegerComparator();
@@ -290,7 +289,7 @@ public class TwoFourTree
         }
         System.out.println("done");
     }
-
+*/
     public void printAllElements() {
         int indent = 0;
         if (root() == null) {
@@ -378,4 +377,3 @@ public class TwoFourTree
 
     }
 }
-*/
