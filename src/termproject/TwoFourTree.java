@@ -234,8 +234,6 @@ public class TwoFourTree
             splitNode.setChild(1, node.getChild(4));
             node.setChild(4, null);
 
-            // # Shift the children to make room for the new node in the parent.
-
             /*
             I actually don't think you need to do this. Should be handled on insert()?
 
@@ -243,10 +241,6 @@ public class TwoFourTree
             for (int i = 4; i >= childIndex + 1; i--) {
                 parent.setChild(i, parent.getChild(i - 1));
             }
-            
-            // Recent addition which may be broken
-            parent.setChild(childIndex, node);
-            parent.setChild(childIndex + 1, splitNode);
             */
           
             // Fix the parent node
