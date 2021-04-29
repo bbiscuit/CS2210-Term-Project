@@ -207,6 +207,7 @@ public class TwoFourTree
                 parent = new TFNode();
                 node.setParent(parent);
                 childIndex = 0;
+                parent.setChild(childIndex, node);
             }
 
             // # Create new new node, into which we will split the items.
@@ -242,9 +243,7 @@ public class TwoFourTree
             }
             */
 
-            // Recent addition which may be broken
 
-            parent.setChild(childIndex, node);
             parent.setChild(childIndex + 1, splitNode);
         }
     }
