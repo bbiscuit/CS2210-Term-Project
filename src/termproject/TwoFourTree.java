@@ -185,7 +185,6 @@ public class TwoFourTree
      * @param node       the node to fix.
      * @param childIndex the child the node is of its parent. This value is ignored if the node is parentless.
      */
-
     private void fixNode(TFNode node, int childIndex) {
         // If the size of the node is at the limit (4)...
 
@@ -247,6 +246,17 @@ public class TwoFourTree
             fixNode(parent, whatChildIsThis(parent));
 
         }
+    }
+
+    /**
+     * Fixes the specified node to retain the 2-4 tree property. This defaults the childIndex to
+     * whatChildIsThis(node). Therefore, it's less efficient, but convenient if you would have to
+     * manually fetch the value anyway.
+     *
+     * @param node  the node to fix.
+     */
+    private void fixNode(TFNode node) {
+        fixNode(node, whatChildIsThis(node));
     }
 
     public static void main(String[] args) {
