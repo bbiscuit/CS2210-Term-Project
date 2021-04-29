@@ -226,6 +226,7 @@ public class TwoFourTree
 
             parent.insertItem(childIndex, moveUp);
             splitNode.setParent(parent);
+            parent.setChild(childIndex + 1, splitNode);
 
             // # Assign the children of the node to the children of the two new nodes.
 
@@ -243,8 +244,6 @@ public class TwoFourTree
             }
             */
 
-
-            parent.setChild(childIndex + 1, splitNode);
         }
     }
 
