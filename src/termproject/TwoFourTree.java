@@ -14,6 +14,7 @@ public class TwoFourTree
     private Comparator treeComp;
     private int size = 0;
     private TFNode treeRoot = null;
+    private static final int MAX_ITEMS = 3;
 
     public TwoFourTree(Comparator comp) {
         treeComp = comp;
@@ -79,7 +80,6 @@ public class TwoFourTree
      */
     public void insertElement(Object key, Object element) {
         // # Declare a new element to insert into the tree
-        final int MAX_ITEMS = treeRoot.getMaxItems();
         Item tempItem = new Item(key, element);
 
         // # Edge case: root is null
@@ -95,26 +95,24 @@ public class TwoFourTree
             return;
         }
 
-        // # If the root is not at capacity, insert.
+        // # Find the location of the node to insert into.
 
         TFNode insertLocation = treeRoot;
         int index = findFirstGreaterThanOrEqualTo(insertLocation, key);
+        TFNode next = insertLocation.getChild(index);
 
-        while (insertLocation.getNumItems() > MAX_ITEMS) {
+        while (next != null) {
             // # Find the index of the child to insert at
-            TFNode temp = insertLocation.getChild(index);
-
-            // # If the child is null, then we
-            if (temp == null) {
-                break;
-            }
-
-            insertLocation = temp;
+            insertLocation = next;
             index = findFirstGreaterThanOrEqualTo(insertLocation, key);
+            next = insertLocation.getChild(index);
+
+            // index = findFirstGreaterThanOrEqualTo(insertLocation, key);
+
         }
 
         insertLocation.insertItem(index, tempItem);
-        // fixNode(insertLocation, whatChildIsThis(insertLocation));
+        fixNode(insertLocation, whatChildIsThis(insertLocation));
     }
 
 
@@ -189,103 +187,99 @@ public class TwoFourTree
      * @param node       the node to fix.
      * @param childIndex the child the node is of its parent. This value is ignored if the node is parentless.
      */
-    private static void fixNode(TFNode node, int childIndex) {
+    private void fixNode(TFNode node, int childIndex) {
         // If the size of the node is at the limit (4)...
 
         if (node != null && node.getNumItems() == 4) {
 
-            // Get the parent of the passed node.
+            // # Get the parent of the passed node.
 
             TFNode parent = node.getParent();
 
-            // If the parent is null...
+            // # If the parent is null...
 
             if (parent == null) {
 
-                // Create a new parent node.
+                // # Create a new parent node.
 
                 parent = new TFNode();
                 node.setParent(parent);
                 childIndex = 0;
+
+                setRoot(parent);
+                parent.setChild(childIndex, node);
             }
-            // Create new new node
+
+            // # Create new new node, into which we will split the items.
+
             final int MOVE_UP_INDEX = 2;
             final int SPLIT_INDEX = 3;
             TFNode splitNode = new TFNode();
 
-            // Remove the split number first (Because it is the last in
+            // # Remove the split number first (Because it is the last in
             // the array) then remove the item that needs to be moved up
+
             splitNode.addItem(0, node.deleteItem(SPLIT_INDEX));
             Item moveUp = node.deleteItem(MOVE_UP_INDEX);
 
-            // Fix up the parents
+            // # Setup the parent post-split.
+
             parent.insertItem(childIndex, moveUp);
             splitNode.setParent(parent);
+            parent.setChild(childIndex + 1, splitNode);
 
-            /*
-            *** OLD CODE
-            // Send the second-to-last (the third) item to the parent.
-
-            final int MOVE_UP_INDEX = 2;
-            Item moveUp = node.deleteItem(MOVE_UP_INDEX);
-            parent.insertItem(childIndex, moveUp);
-
-            // Split the node into two children; the first makes up the first two items, the second is the last
-            // item (after the one we moved up).
-
-            final int SPLIT_INDEX = 3;
-            TFNode splitNode = new TFNode();
-            splitNode.addItem(0, node.deleteItem(SPLIT_INDEX));
-            splitNode.setParent(parent);
-
-
-
-             */
-
-            // Assign the children of the node to the children of the two new nodes.
+            // # Assign the last two children from the "fixing" node to the "split" node.
 
             splitNode.setChild(0, node.getChild(3));
             node.setChild(3, null);
             splitNode.setChild(1, node.getChild(4));
             node.setChild(4, null);
 
-            // Shift the children to make room for the new node in the parent.
+            // # If the new node has children, set them up
+
+            if (splitNode.getChild(0) != null) {
+                splitNode.getChild(0).setParent(splitNode);
+            }
+            if (splitNode.getChild(1) != null) {
+                splitNode.getChild(1).setParent(splitNode);
+            }
+
+            /*
+            I actually don't think you need to do this. Should be handled on insert()?
 
             // (If something is broken, it's probably this)
             for (int i = 4; i >= childIndex + 1; i--) {
                 parent.setChild(i, parent.getChild(i - 1));
             }
-            // Recent addition which may be broken
-            parent.setChild(childIndex, node);
-            parent.setChild(childIndex + 1, splitNode);
+            */
+          
+            // Fix the parent node
+            fixNode(parent, whatChildIsThis(parent));
         }
     }
+
+    /**
+     * Fixes the specified node to retain the 2-4 tree property. This defaults the childIndex to
+     * whatChildIsThis(node). Therefore, it's less efficient, but convenient if you would have to
+     * manually fetch the value anyway.
+     *
+     * @param node  the node to fix.
+     */
+    private void fixNode(TFNode node) {
+        fixNode(node, whatChildIsThis(node));
+    }
+
     public static void main(String[] args) {
-        // # Declare a parent and fill it
+        TwoFourTree tree = new TwoFourTree(new IntegerComparator());
 
-        TFNode parent = new TFNode();
-        for (int i = 1; i < 4; i++) {
-            parent.addItem(i - 1, new Item(i * 10, i * 10));
+        for (int i = 0; i < 16; i++) {
+            tree.insertElement(i, i);
         }
 
-        TFNode firstChild = new TFNode();
-        for (int i = 0; i < 4; i++) {
-            firstChild.addItem(i, new Item(i, i));
-        }
+        tree.insertElement(16, 16);
 
-        firstChild.setParent(parent);
-        parent.setChild(0, firstChild);
-
-        fixNode(firstChild, 0);
-        fixNode(parent, -1);
-
-        TFNode grandparent = parent.getParent();
-
-        System.out.println("grandparent: " + grandparent);
-        System.out.println("child 1:" + grandparent.getChild(0));
-        System.out.println("child 2: " + grandparent.getChild(1));
-        System.out.println("grandchild 1: " + grandparent.getChild(0).getChild(0));
-        System.out.println("grandchild 2: " + grandparent.getChild(0).getChild(1));
+        tree.checkTree();
+        tree.printTree(tree.root(), 5);
     }
 
 
