@@ -233,6 +233,15 @@ public class TwoFourTree
             splitNode.setChild(1, node.getChild(4));
             node.setChild(4, null);
 
+            // # If the new node has children, set them up
+
+            if (splitNode.getChild(0) != null) {
+                splitNode.getChild(0).setParent(splitNode);
+            }
+            if (splitNode.getChild(1) != null) {
+                splitNode.getChild(1).setParent(splitNode);
+            }
+
             /*
             I actually don't think you need to do this. Should be handled on insert()?
 
@@ -244,7 +253,6 @@ public class TwoFourTree
           
             // Fix the parent node
             fixNode(parent, whatChildIsThis(parent));
-
         }
     }
 
@@ -262,16 +270,14 @@ public class TwoFourTree
     public static void main(String[] args) {
         TwoFourTree tree = new TwoFourTree(new IntegerComparator());
 
-        for (int i = 11; i < 13; i++) {
+        for (int i = 0; i < 19; i++) {
             tree.insertElement(i, i);
         }
 
-        for (int i = 0; i < 10; i++) {
-            tree.insertElement(i, i);
-        }
+        // tree.insertElement(20, 20);
 
-
-        tree.printTree(tree.treeRoot, 1);
+        tree.checkTree();
+        tree.printTree(tree.root(), 5);
     }
 
 
