@@ -108,6 +108,7 @@ public class TwoFourTree
             next = insertLocation.getChild(index);
 
             // index = findFirstGreaterThanOrEqualTo(insertLocation, key);
+
         }
 
         insertLocation.insertItem(index, tempItem);
