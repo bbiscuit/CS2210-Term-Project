@@ -105,6 +105,7 @@ public class TwoFourTree
             // # Find the index of the child to insert at
             insertLocation = next;
             next = insertLocation.getChild(index);
+
             index = findFirstGreaterThanOrEqualTo(insertLocation, key);
         }
 
@@ -184,61 +185,74 @@ public class TwoFourTree
      * @param node       the node to fix.
      * @param childIndex the child the node is of its parent. This value is ignored if the node is parentless.
      */
+
     private void fixNode(TFNode node, int childIndex) {
         // If the size of the node is at the limit (4)...
 
         if (node != null && node.getNumItems() == 4) {
 
-            // Get the parent of the passed node.
+            // # Get the parent of the passed node.
 
             TFNode parent = node.getParent();
 
-            // If the parent is null...
+            // # If the parent is null...
 
             if (parent == null) {
 
-                // Create a new parent node.
+                // # Create a new parent node.
 
                 parent = new TFNode();
                 node.setParent(parent);
                 childIndex = 0;
-                treeRoot = parent;
+
+                setRoot(parent);
+                parent.setChild(childIndex, node);
             }
-            // Create new new node
+
+            // # Create new new node, into which we will split the items.
+
             final int MOVE_UP_INDEX = 2;
             final int SPLIT_INDEX = 3;
             TFNode splitNode = new TFNode();
 
-            // Remove the split number first (Because it is the last in
+            // # Remove the split number first (Because it is the last in
             // the array) then remove the item that needs to be moved up
+
             splitNode.addItem(0, node.deleteItem(SPLIT_INDEX));
             Item moveUp = node.deleteItem(MOVE_UP_INDEX);
 
-            // Fix up the parents
+            // # Setup the parent post-split.
+
             parent.insertItem(childIndex, moveUp);
             splitNode.setParent(parent);
+            parent.setChild(childIndex + 1, splitNode);
 
-            // Assign the children of the node to the children of the two new nodes.
+            // # Assign the last two children from the "fixing" node to the "split" node.
 
             splitNode.setChild(0, node.getChild(3));
             node.setChild(3, null);
             splitNode.setChild(1, node.getChild(4));
             node.setChild(4, null);
 
-            // Shift the children to make room for the new node in the parent.
+            // # Shift the children to make room for the new node in the parent.
 
+            /*
             // (If something is broken, it's probably this)
             for (int i = 4; i >= childIndex + 1; i--) {
                 parent.setChild(i, parent.getChild(i - 1));
             }
+            
             // Recent addition which may be broken
             parent.setChild(childIndex, node);
             parent.setChild(childIndex + 1, splitNode);
-
+            */
+          
             // Fix the parent node
             fixNode(parent, whatChildIsThis(parent));
+
         }
     }
+
     public static void main(String[] args) {
         TwoFourTree tree = new TwoFourTree(new IntegerComparator());
 
