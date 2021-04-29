@@ -104,9 +104,10 @@ public class TwoFourTree
         while (next != null) {
             // # Find the index of the child to insert at
             insertLocation = next;
+            index = findFirstGreaterThanOrEqualTo(insertLocation, key);
             next = insertLocation.getChild(index);
 
-            index = findFirstGreaterThanOrEqualTo(insertLocation, key);
+            // index = findFirstGreaterThanOrEqualTo(insertLocation, key);
         }
 
         insertLocation.insertItem(index, tempItem);
@@ -270,11 +271,11 @@ public class TwoFourTree
     public static void main(String[] args) {
         TwoFourTree tree = new TwoFourTree(new IntegerComparator());
 
-        for (int i = 0; i < 19; i++) {
+        for (int i = 0; i < 16; i++) {
             tree.insertElement(i, i);
         }
 
-        // tree.insertElement(20, 20);
+        tree.insertElement(16, 16);
 
         tree.checkTree();
         tree.printTree(tree.root(), 5);
