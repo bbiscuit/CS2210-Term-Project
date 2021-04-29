@@ -190,7 +190,7 @@ public class TwoFourTree
      * @param childIndex the child the node is of its parent. This value is ignored if the node is parentless.
      */
     private static void fixNode(TFNode node, int childIndex) {
-        // # If the size of the node is at the limit (4)...
+        // # If the node is overflowing (size == 4)...
 
         if (node != null && node.getNumItems() == 4) {
 
@@ -209,7 +209,7 @@ public class TwoFourTree
                 childIndex = 0;
             }
 
-            // # Create new new node
+            // # Create new new node, into which we will split the items.
 
             final int MOVE_UP_INDEX = 2;
             final int SPLIT_INDEX = 3;
@@ -226,26 +226,6 @@ public class TwoFourTree
             parent.insertItem(childIndex, moveUp);
             splitNode.setParent(parent);
 
-            /*
-            *** OLD CODE
-            // Send the second-to-last (the third) item to the parent.
-
-            final int MOVE_UP_INDEX = 2;
-            Item moveUp = node.deleteItem(MOVE_UP_INDEX);
-            parent.insertItem(childIndex, moveUp);
-
-            // Split the node into two children; the first makes up the first two items, the second is the last
-            // item (after the one we moved up).
-
-            final int SPLIT_INDEX = 3;
-            TFNode splitNode = new TFNode();
-            splitNode.addItem(0, node.deleteItem(SPLIT_INDEX));
-            splitNode.setParent(parent);
-
-
-
-             */
-
             // # Assign the children of the node to the children of the two new nodes.
 
             splitNode.setChild(0, node.getChild(3));
@@ -255,10 +235,12 @@ public class TwoFourTree
 
             // # Shift the children to make room for the new node in the parent.
 
+            /*
             // (If something is broken, it's probably this)
             for (int i = 4; i >= childIndex + 1; i--) {
                 parent.setChild(i, parent.getChild(i - 1));
             }
+            */
 
             // Recent addition which may be broken
 
