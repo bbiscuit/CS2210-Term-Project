@@ -160,6 +160,8 @@ public class TwoFourTree
             }
         }
 
+        // # If no child was ever found, return -1.
+
         return -1;
     }
 
