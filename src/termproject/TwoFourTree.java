@@ -87,10 +87,14 @@ public class TwoFourTree
      * @param key       of object to be inserted
      * @param element   to be inserted
      */
-    public void insertElement(Object key, Object element) {
+    public void insertElement(Object key, Object element) throws NullKeyException {
         // # Parameter check: if either the key or the object is null,
         // throw.
             
+        if (key == null) {
+            throw new NullKeyException("key was null");
+        }
+        
         // # Declare a new element to insert into the tree
         Item tempItem = new Item(key, element);
 
