@@ -54,7 +54,7 @@ public class TwoFourTree
 
         while (node != null) {
 
-            // # Find the first key in the node which is greater than or equal to the argument.
+            // # Find the index of the first key in the node which is greater than or equal to the argument.
 
             int fge = findFirstGreaterThanOrEqualTo(node, key);
 
@@ -69,6 +69,8 @@ public class TwoFourTree
             node = node.getChild(fge);
         }
 
+        // # If nothing was ever found, return null.
+            
         return null;
     }
 
