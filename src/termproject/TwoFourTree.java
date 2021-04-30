@@ -183,9 +183,11 @@ public class TwoFourTree
      * @param key  the key to test for.
      * @param node the node to check.
      * @return the node which is "first greater than or equal to."
+     * @throws TFNodeException if the provided node is null.
+     * @throws NullKeyException if the provided key is null.
      */
 
-    private int findFirstGreaterThanOrEqualTo(TFNode node, Object key) {
+    private int findFirstGreaterThanOrEqualTo(TFNode node, Object key) throws TFNodeException, NullKeyException {
         // # Param checking
 
         if (node == null) {
@@ -222,7 +224,7 @@ public class TwoFourTree
      * @param childIndex the child the node is of its parent. This value is ignored if the node is parentless.
      */
     private void fixNode(TFNode node, int childIndex) {
-        // If the size of the node is at the limit (4)...
+        // # If the size of the node is at the limit (4)...
 
         if (node != null && node.getNumItems() == 4) {
 
