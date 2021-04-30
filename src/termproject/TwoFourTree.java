@@ -280,7 +280,8 @@ public class TwoFourTree
                 splitNode.getChild(1).setParent(splitNode);
             }
           
-            // # Fix the parent node
+            // # Recursively fix the parent node
+
             fixNode(parent);
         }
     }
