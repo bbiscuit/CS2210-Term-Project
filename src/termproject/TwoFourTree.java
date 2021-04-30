@@ -2,11 +2,11 @@ package termproject;
 
 /**
  * Title:        Term Project 2-4 Trees
- * Description:
+ * Description:  A 2-4 tree implementation based upon the Dictionary interface.
  * Copyright:    Copyright (c) 2001
- * Company:
- * @author
- * @version 1.0
+ * Company:      Cedarville University
+ * @author       Andrew Huffman, Kyle Samuelson
+ * @version      1.0
  */
 public class TwoFourTree
         implements Dictionary {
