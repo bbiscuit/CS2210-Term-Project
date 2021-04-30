@@ -2,11 +2,11 @@ package termproject;
 
 /**
  * Title:        Term Project 2-4 Trees
- * Description:
+ * Description:  A 2-4 tree implementation based upon the Dictionary interface.
  * Copyright:    Copyright (c) 2001
- * Company:
- * @author
- * @version 1.0
+ * Company:      Cedarville University
+ * @author       Andrew Huffman, Kyle Samuelson
+ * @version      1.0
  */
 public class TwoFourTree
         implements Dictionary {
@@ -42,10 +42,17 @@ public class TwoFourTree
     /**
      * Searches dictionary to determine if key is present
      *
-     * @param key to be searched for
-     * @return object corresponding to key; null if not found
+     * @param key                to be searched for
+     * @return                   object corresponding to key; null if not found
+     * @throws NullKeyException  when the provided key is null
      */
-    public Object findElement(Object key) {
+    public Object findElement(Object key) throws NullKeyException {
+        // # Param checking
+        
+        if (key == null) {
+            throw new NullKeyException("key was null");
+        }	
+            
         // # Get the starting node as the root of the tree.
 
         TFNode node = root();
@@ -54,7 +61,7 @@ public class TwoFourTree
 
         while (node != null) {
 
-            // # Find the first key in the node which is greater than or equal to the argument.
+            // # Find the index of the first key in the node which is greater than or equal to the argument.
 
             int fge = findFirstGreaterThanOrEqualTo(node, key);
 
@@ -69,16 +76,25 @@ public class TwoFourTree
             node = node.getChild(fge);
         }
 
+        // # If nothing was ever found, return null.
+            
         return null;
     }
 
     /**
      * Inserts provided element into the Dictionary
      *
-     * @param key     of object to be inserted
-     * @param element to be inserted
+     * @param key       of object to be inserted
+     * @param element   to be inserted
      */
-    public void insertElement(Object key, Object element) {
+    public void insertElement(Object key, Object element) throws NullKeyException {
+        // # Parameter check: if either the key or the object is null,
+        // throw.
+            
+        if (key == null) {
+            throw new NullKeyException("key was null");
+        }
+        
         // # Declare a new element to insert into the tree
         Item tempItem = new Item(key, element);
 
@@ -86,7 +102,7 @@ public class TwoFourTree
 
         if (treeRoot == null) {
 
-            // # Make a new node at the root.
+            // # Make a new node at the root, and increase the size of the tree.
 
             treeRoot = new TFNode();
             treeRoot.insertItem(0, tempItem);
@@ -122,13 +138,13 @@ public class TwoFourTree
      * @param node the node to check.
      * @return the child index of the passed node; -1 if the node is parent-less or if the provided node is not hooked
      * up to its child correctly.
-     * @throws NullPointerException if the provided node is null
+     * @throws TFNodeException if the provided node is null
      */
-    private int whatChildIsThis(TFNode node) {
+    private int whatChildIsThis(TFNode node) throws TFNodeException {
         // # Loop through the parent's children.
 
         if (node == null) {
-            throw new NullPointerException("null argument");
+            throw new TFNodeException("node provided was null");
         }
 
         TFNode parent = node.getParent();
@@ -143,6 +159,8 @@ public class TwoFourTree
                 }
             }
         }
+
+        // # If no child was ever found, return -1.
 
         return -1;
     }
@@ -165,19 +183,37 @@ public class TwoFourTree
      * @param key  the key to test for.
      * @param node the node to check.
      * @return the node which is "first greater than or equal to."
+     * @throws TFNodeException if the provided node is null.
+     * @throws NullKeyException if the provided key is null.
      */
 
-    private int findFirstGreaterThanOrEqualTo(TFNode node, Object key) {
+    private int findFirstGreaterThanOrEqualTo(TFNode node, Object key) throws TFNodeException, NullKeyException {
+        // # Param checking
+
+        if (node == null) {
+            throw new TFNodeException("provided node was null");
+        }
+        else if (key == null) {
+            throw new NullKeyException("provided key was null");
+        }
+
         int i = 0;
-        // Search through all the items in the node
+
+        // # Search through all the items in the node
+
         for (i = 0; i < node.getNumItems(); i++) {
-            Object tempKey = node.getItem(i).key();
-            // if we find something that is greater than the given key
+            Object nodeKey = node.getItem(i).key();
+
+            // # if we find something that is greater than the given key
             // we get its index if not we return the greatest index
-            if (treeComp.isGreaterThanOrEqualTo(tempKey, key)) {
+            if (treeComp.isGreaterThanOrEqualTo(nodeKey, key)) {
                 return i;
             }
         }
+
+        // # If no key was found to be greater than or equal to the passed key,
+        // return i (which should be at numItems - 1).
+
         return i;
     }
 
@@ -188,7 +224,7 @@ public class TwoFourTree
      * @param childIndex the child the node is of its parent. This value is ignored if the node is parentless.
      */
     private void fixNode(TFNode node, int childIndex) {
-        // If the size of the node is at the limit (4)...
+        // # If the size of the node is at the limit (4)...
 
         if (node != null && node.getNumItems() == 4) {
 
@@ -244,7 +280,8 @@ public class TwoFourTree
                 splitNode.getChild(1).setParent(splitNode);
             }
           
-            // # Fix the parent node
+            // # Recursively fix the parent node
+
             fixNode(parent);
         }
     }
@@ -260,21 +297,7 @@ public class TwoFourTree
         fixNode(node, whatChildIsThis(node));
     }
 
-    public static void main(String[] args) {
-        TwoFourTree tree = new TwoFourTree(new IntegerComparator());
-
-        for (int i = 0; i < 16; i++) {
-            tree.insertElement(i, i);
-        }
-
-        tree.insertElement(16, 16);
-
-        tree.checkTree();
-        tree.printTree(tree.root(), 5);
-    }
-
-
-    /*
+/*
     public static void main(String[] args) {
         Comparator myComp = new IntegerComparator();
         TwoFourTree myTree = new TwoFourTree(myComp);
@@ -358,7 +381,7 @@ public class TwoFourTree
         }
         System.out.println("done");
     }
-*/
+ */
 
     public void printAllElements() {
         int indent = 0;
