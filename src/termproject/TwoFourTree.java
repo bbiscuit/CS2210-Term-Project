@@ -42,8 +42,8 @@ public class TwoFourTree
     /**
      * Searches dictionary to determine if key is present
      *
-     * @param key to be searched for
-     * @return object corresponding to key; null if not found
+     * @param key   to be searched for
+     * @return      object corresponding to key; null if not found
      */
     public Object findElement(Object key) {
         // # Get the starting node as the root of the tree.
@@ -77,10 +77,13 @@ public class TwoFourTree
     /**
      * Inserts provided element into the Dictionary
      *
-     * @param key     of object to be inserted
-     * @param element to be inserted
+     * @param key       of object to be inserted
+     * @param element   to be inserted
      */
     public void insertElement(Object key, Object element) {
+        // # Parameter check: if either the key or the object is null,
+        // throw.
+            
         // # Declare a new element to insert into the tree
         Item tempItem = new Item(key, element);
 
@@ -88,7 +91,7 @@ public class TwoFourTree
 
         if (treeRoot == null) {
 
-            // # Make a new node at the root.
+            // # Make a new node at the root, and increase the size of the tree.
 
             treeRoot = new TFNode();
             treeRoot.insertItem(0, tempItem);
