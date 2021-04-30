@@ -297,6 +297,16 @@ public class TwoFourTree
         fixNode(node, whatChildIsThis(node));
     }
 
+    public static void main(String[] args) {
+        TwoFourTree myTree = new TwoFourTree(new IntegerComparator());
+
+        for (int i = 0; i < 100; i++) {
+            myTree.insertElement(i,i);
+        }
+
+        myTree.printTree(myTree.root(), 5);
+    }
+
 /*
     public static void main(String[] args) {
         Comparator myComp = new IntegerComparator();
