@@ -138,13 +138,13 @@ public class TwoFourTree
      * @param node the node to check.
      * @return the child index of the passed node; -1 if the node is parent-less or if the provided node is not hooked
      * up to its child correctly.
-     * @throws NullPointerException if the provided node is null
+     * @throws TFNodeException if the provided node is null
      */
-    private int whatChildIsThis(TFNode node) {
+    private int whatChildIsThis(TFNode node) throws TFNodeException {
         // # Loop through the parent's children.
 
         if (node == null) {
-            throw new NullPointerException("null argument");
+            throw new TFNodeException("node provided was null");
         }
 
         TFNode parent = node.getParent();
@@ -276,21 +276,7 @@ public class TwoFourTree
         fixNode(node, whatChildIsThis(node));
     }
 
-    public static void main(String[] args) {
-        TwoFourTree tree = new TwoFourTree(new IntegerComparator());
-
-        for (int i = 0; i < 16; i++) {
-            tree.insertElement(i, i);
-        }
-
-        tree.insertElement(16, 16);
-
-        tree.checkTree();
-        tree.printTree(tree.root(), 5);
-    }
-
-
-    /*
+/*
     public static void main(String[] args) {
         Comparator myComp = new IntegerComparator();
         TwoFourTree myTree = new TwoFourTree(myComp);
@@ -374,7 +360,7 @@ public class TwoFourTree
         }
         System.out.println("done");
     }
-*/
+ */
 
     public void printAllElements() {
         int indent = 0;

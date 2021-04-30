@@ -8,7 +8,7 @@ package termproject;
 * @version     4/30/21
 */
 public class NullKeyException extends RuntimeException {
-      public NullKeyException(String mesage) {
-            super(mesage);
+      public NullKeyException(String message) {
+            super(message);
       }
 }
