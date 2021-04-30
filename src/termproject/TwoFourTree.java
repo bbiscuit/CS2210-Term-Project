@@ -243,18 +243,9 @@ public class TwoFourTree
             if (splitNode.getChild(1) != null) {
                 splitNode.getChild(1).setParent(splitNode);
             }
-
-            /*
-            I actually don't think you need to do this. Should be handled on insert()?
-
-            // (If something is broken, it's probably this)
-            for (int i = 4; i >= childIndex + 1; i--) {
-                parent.setChild(i, parent.getChild(i - 1));
-            }
-            */
           
-            // Fix the parent node
-            fixNode(parent, whatChildIsThis(parent));
+            // # Fix the parent node
+            fixNode(parent);
         }
     }
 
