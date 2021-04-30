@@ -186,16 +186,32 @@ public class TwoFourTree
      */
 
     private int findFirstGreaterThanOrEqualTo(TFNode node, Object key) {
+        // # Param checking
+
+        if (node == null) {
+            throw new TFNodeException("provided node was null");
+        }
+        else if (key == null) {
+            throw new NullKeyException("provided key was null");
+        }
+
         int i = 0;
-        // Search through all the items in the node
+
+        // # Search through all the items in the node
+
         for (i = 0; i < node.getNumItems(); i++) {
-            Object tempKey = node.getItem(i).key();
-            // if we find something that is greater than the given key
+            Object nodeKey = node.getItem(i).key();
+
+            // # if we find something that is greater than the given key
             // we get its index if not we return the greatest index
-            if (treeComp.isGreaterThanOrEqualTo(tempKey, key)) {
+            if (treeComp.isGreaterThanOrEqualTo(nodeKey, key)) {
                 return i;
             }
         }
+
+        // # If no key was found to be greater than or equal to the passed key,
+        // return i (which should be at numItems - 1).
+
         return i;
     }
 
