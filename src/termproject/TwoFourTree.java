@@ -42,10 +42,17 @@ public class TwoFourTree
     /**
      * Searches dictionary to determine if key is present
      *
-     * @param key   to be searched for
-     * @return      object corresponding to key; null if not found
+     * @param key                to be searched for
+     * @return                   object corresponding to key; null if not found
+     * @throws NullKeyException  when the provided key is null
      */
-    public Object findElement(Object key) {
+    public Object findElement(Object key) throws NullKeyException {
+        // # Param checking
+        
+        if (key == null) {
+            throw new NullKeyException("key was null");
+        }	
+            
         // # Get the starting node as the root of the tree.
 
         TFNode node = root();
